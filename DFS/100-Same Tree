@@ -47,3 +47,31 @@ class Solution(object):
                 stack.append(p.right)
                 stack.append(q.right)
         return True
+      
+# BFS Queue
+# Time: O(n)
+# Space: O(n)
+class Solution(object):
+    def isSameTree(self, p, q):
+        """
+        :type p: TreeNode
+        :type q: TreeNode
+        :rtype: bool
+        """
+        queue = [p, q]
+        while queue:
+            q = queue.pop()
+            p = queue.pop()
+            if not p and not q:
+                continue
+            if not p or not q:
+                return False
+            print [p.val, q.val]
+            if p.val != q.val:
+                return False
+            else:
+                queue.insert(0, p.left)
+                queue.insert(0, q.left)
+                queue.insert(0, p.right)
+                queue.insert(0, q.right)
+        return True
