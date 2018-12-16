@@ -1,0 +1,47 @@
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def rightSideView(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[int]
+        """
+        q = [root]
+        ans = []
+        while any(q):
+            ans.append(q[-1].val)
+            new = []
+            for x in q:
+                if x.left:
+                    new.append(x.left)
+                if x.right:
+                    new.append(x.right)
+            q = new
+        return ans
+        
+        
+# DFS solution O(n) and O(n)
+
+class Solution(object):
+    def rightSideView(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[int]
+        """
+        stack = [(root, 0)]
+        ans = []
+        rightmost = dict()
+        max_depth = -1
+        while stack:
+            node, depth = stack.pop()
+            if node:
+                max_depth = max(max_depth, depth)
+                rightmost.setdefault(depth, node.val)
+                stack.append((node.left, depth+1))
+                stack.append((node.right, depth+1))
+        return [rightmost[depth] for depth in range(max_depth+1)]
