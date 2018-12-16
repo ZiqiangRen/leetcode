@@ -1,0 +1,68 @@
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def sumNumbers(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        self.ans = []
+        self.DFS(root)
+        return sum(self.ans)
+    
+    def DFS(self, root, path = 0):
+        if not root:
+            return
+        if not root.left and not root.right:
+            self.ans.append(path*10+root.val)
+            return
+        self.DFS(root.left, path*10+root.val)
+        self.DFS(root.right, path*10+root.val)
+        return
+        
+ # DFS using stack      
+ class Solution(object):
+    def sumNumbers(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        ans = 0
+        stack = [root]
+        while any(stack):
+            node = stack.pop()
+            if node.left:
+                node.left.val += node.val*10
+                stack.append(node.left)
+            if node.right:
+                node.right.val += node.val*10
+                stack.append(node.right)
+            if not node.left and not node.right:
+                ans += node.val
+        return ans
+   
+# BFS using queue  
+class Solution(object):
+    def sumNumbers(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        ans = 0
+        q = [root]
+        while any(q):
+            node = q.pop()
+            if node.left:
+                node.left.val += node.val*10
+                q.insert(0, node.left)
+            if node.right:
+                node.right.val += node.val*10
+                q.insert(0, node.right)
+            if not node.left and not node.right:
+                ans += node.val
+        return ans
