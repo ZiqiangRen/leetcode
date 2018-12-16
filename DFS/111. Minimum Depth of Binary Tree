@@ -1,0 +1,37 @@
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+# Time: O(n) because we visit each node for exact one time
+# Space: O(n) DFS recursion
+
+
+class Solution(object):
+    def minDepth(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        if not root:
+            return 0
+        left = self.minDepth(root.left)
+        right = self.minDepth(root.right)
+        return 1+min(left, right) if left and right else 1+max(left, right)
+
+# Time: O(n)
+# Space: O(logn). in the worst case, O(n). 
+class Solution(object):
+    def minDepth(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        if not root:
+            return 0
+        if not root.left and not root.right:
+            return 1
+        left = self.minDepth(root.left) if root.left else float('inf')
+        right = self.minDepth(root.right) if root.right else float('inf')
+        return 1+min(left, right)
