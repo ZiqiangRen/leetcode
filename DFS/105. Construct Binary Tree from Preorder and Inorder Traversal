@@ -1,0 +1,28 @@
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+#Time O(n^2), index costs o(n) time, and we have to implement the index operation for n times.
+#Space O(n) We need to store the whole tree
+
+
+class Solution(object):
+    def buildTree(self, preorder, inorder):
+        """
+        :type preorder: List[int]
+        :type inorder: List[int]
+        :rtype: TreeNode
+        """
+        if not preorder:
+            return None
+        root = TreeNode(preorder[0])
+        root_index = inorder.index(preorder[0])
+        in_right = inorder[root_index+1:]
+        in_left = inorder[:root_index]
+        pre_right = preorder[len(preorder)-len(in_right):]
+        pre_left = preorder[1:len(in_left)+1]
+        root.left = self.buildTree(pre_left, in_left)
+        root.right = self.buildTree(pre_right, in_right)
+        return root
