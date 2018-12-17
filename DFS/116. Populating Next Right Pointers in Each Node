@@ -1,0 +1,70 @@
+# First try:
+# Definition for binary tree with next pointer.
+# class TreeLinkNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+#         self.next = None
+
+class Solution:
+    # @param root, a tree link node
+    # @return nothing
+    def connect(self, root):
+        if not root:
+            return
+        dummy,  dummy2 = TreeLinkNode(0), TreeLinkNode(0)
+        dummy.next = root
+        node = root
+        low = dummy2
+        while node and node.left:
+            low.next = node.left
+            low = low.next
+            low.next = node.right
+            low = low.next
+            node = node.next
+            if not node:
+                dummy.next = dummy.next.left
+                node = dummy.next
+                dummy2.next = dummy2.next.left
+                low = dummy2                
+        return
+        
+# Simplified:
+class Solution:
+    # @param root, a tree link node
+    # @return nothing
+    def connect(self, root):
+        if not root:
+            return
+        dummy = TreeLinkNode(0)
+        dummy.next = root.left
+        node = root
+        low = dummy
+        while node and node.left:
+            low.next = node.left
+            low = low.next
+            low.next = node.right
+            low = low.next
+            node = node.next
+            if not node:
+                node = dummy.next
+                dummy.next = dummy.next.left
+                low = dummy.next              
+        return
+        
+# More Simplified:
+class Solution:
+    # @param root, a tree link node
+    # @return nothing
+    def connect(self, root):
+        low = dummy = TreeLinkNode(0)
+        while root and root.left:
+            low.next = root.left
+            low = low.next
+            low.next = root.right
+            low = low.next
+            root = root.next
+            if not root:
+                low = dummy
+                root = dummy.next
