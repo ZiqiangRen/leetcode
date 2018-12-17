@@ -1,0 +1,94 @@
+#naive DFS:   (TLE)
+
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def rob(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """    
+        def helper(root, flag = 1):
+            if not root:
+                return 0
+            if not root.left and not root.right:
+                if flag:
+                    return root.val                
+            if not flag:                
+                return helper(root.left, 1)+helper(root.right,1)
+            else:
+                return max(helper(root.left, 1)+helper(root.right, 1), root.val+helper(root.left, 0)+helper(root.right, 0))
+        
+        return helper(root)
+      
+      
+#naive DFS with cache: (accepted with low beat rate)
+
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def rob(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """    
+        self.d = {}
+        def helper(root, flag = 1):
+            if not root:
+                return 0
+            if not root.left and not root.right:
+                if flag:
+                    return root.val                                       
+            if (root.left, 1) not in self.d:
+                self.d[(root.left, 1)] = helper(root.left, 1)
+            if (root.right,1) not in self.d:
+                self.d[(root.right,1)] = helper(root.right,1)
+            if not flag:
+                return self.d[(root.left, 1)]+self.d[(root.right,1)]
+            else:
+                if (root.left, 0) not in self.d:
+                    self.d[(root.left, 0)] = helper(root.left, 0)
+                if (root.right,0) not in self.d:
+                    self.d[(root.right,0)] = helper(root.right, 0)
+                return max(self.d[(root.left, 1)]+self.d[(root.right,1)], root.val+self.d[(root.left, 0)]+self.d[(root.right,0)])
+        
+        return helper(root)
+                         
+                
+# naive recursion (DFS) (TLE)
+  class Solution(object):
+    def rob(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """    
+        if not root:
+            return 0
+        l, r = 0, 0
+        if root.left:
+            l = self.rob(root.left.left)+self.rob(root.left.right)
+        if root.right:
+            r = self.rob(root.right.left)+self.rob(root.right.right)
+        return max(root.val+l+r, self.rob(root.left)+self.rob(root.right))
+   
+   
+# short and effective Python solution:
+
+class Solution(object):
+    def rob(self, root):
+        def helper(root):
+            if not root: return (0, 0)
+            left, right = helper(root.left), helper(root.right)
+            return (max(left[0], left[1]) + max(right[0], right[1]), left[0] + right[0] + root.val)
+        return max(helper(root))
+        
