@@ -1,0 +1,60 @@
+import copy
+class Solution(object):
+    def canFinish(self, numCourses, prerequisites):
+        """
+        :type numCourses: int
+        :type prerequisites: List[List[int]]
+        :rtype: bool
+        """
+        table = [[] for i in range(numCourses)]
+        noTake = []
+        canTake = []
+        degree = [0]*numCourses
+        
+        for [x,y] in prerequisites:
+            table[x].append(y)
+            degree[y] += 1
+
+        for i in range(numCourses):
+            if degree[i]:
+                noTake.append(i)
+            else:
+                canTake.append(i)
+        print table
+        print canTake
+        print degree
+        while canTake and noTake:
+            newTake = []
+            for x in canTake:
+                print x
+                for y in table[x]:
+                    degree[y] -= 1
+                    if degree[y] == 0:
+                        newTake.append(y)
+                        noTake.remove(y)
+            canTake, newTake = newTake, canTake
+        return not noTake
+            
+# Straightforward method:
+class Solution(object):
+    def canFinish(self, numCourses, prerequisites):
+        """
+        :type numCourses: int
+        :type prerequisites: List[List[int]]
+        :rtype: bool
+        """
+        graph = [[0]*numCourses for _ in range(numCourses)]
+        for x in prerequisites:
+            graph[x[0]][x[1]] = 1
+        can = [sum(x) for x in graph]
+        while set(can)!={'*'}:
+            if 0 in can:
+                index = can.index(0)
+                can[index] = '*'
+                for i in xrange(numCourses):
+                    if graph[i][index]:
+                        can[i] -= 1
+                        graph[i][index] = 0
+            elif set(can)!={'*'}:
+                return False
+        return True
