@@ -1,0 +1,68 @@
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def binaryTreePaths(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[str]
+        """
+        ans = []
+        stack = []
+        stack.append([root, ""])
+        path = ""
+        while stack:
+            node, path = stack.pop()
+            if node:
+                path += str(node.val)
+                if not node.left and not node.right:
+                    ans.append(path)
+                else:
+                    stack.append([node.left, path+"->"])
+                    stack.append([node.right, path+"->"])        
+        return ans
+        
+# Second try
+class Solution(object):
+    def binaryTreePaths(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[str]
+        """
+        self.ans = []
+        def helper(root, path):
+            if not root.left and not root.right:
+                self.ans.append(path)
+                return
+            if root.left:
+                helper(root.left, path+"->"+str(root.left.val))
+            if root.right:
+                helper(root.right, path+"->"+str(root.right.val))
+            return
+        if root:
+            helper(root, str(root.val))
+        return self.ans
+        
+ # Third try
+ class Solution(object):
+    def binaryTreePaths(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[str]
+        """
+        self.ans = []
+        def helper(root, path):
+            if not root:
+                return
+            if not root.left and not root.right:
+                self.ans.append(path+str(root.val))
+                return
+            helper(root.left, path+str(root.val)+"->")
+            helper(root.right, path+str(root.val)+"->")
+            return
+        helper(root, "")
+        return self.ans
