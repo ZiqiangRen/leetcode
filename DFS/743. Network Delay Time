@@ -1,0 +1,61 @@
+# Ordinary DFS with graph:
+
+class Solution(object):
+    def networkDelayTime(self, times, N, K):
+        """
+        :type times: List[List[int]]
+        :type N: int
+        :type K: int
+        :rtype: int
+        """
+        graph = collections.defaultdict(list)
+        for u, v, w in times:
+            graph[u].append((w, v))
+            
+        dist = {node: float('inf') for node in xrange(1,N+1)}
+        
+        def dfs(node, path):
+            if path>=dist[node]:
+                return
+            dist[node] = path
+            for time, nei in sorted(graph[node]):
+                dfs(nei, path+time)
+                
+        dfs(K, 0)
+        ans = max(dist.values())
+        return ans if ans!=float('inf') else -1
+
+
+#Dijkstra's Algorithm
+class Solution(object):
+    def networkDelayTime(self, times, N, K):
+        """
+        :type times: List[List[int]]
+        :type N: int
+        :type K: int
+        :rtype: int
+        """
+        graph = collections.defaultdict(list)
+        for u, v, w in times:
+            graph[u].append((w, v))
+            
+        dist = {node: float('inf') for node in xrange(1,N+1)}
+        seen = [False]*(N+1)
+        dist[K] = 0
+        
+        while True:
+            cur_node = -1
+            cur_dist = float('inf')
+            for i in xrange(1, N+1):
+                if not seen[i] and dist[i]<cur_dist:
+                    cur_dist = dist[i]
+                    cur_node = i
+                    
+            if cur_node<0:
+                break
+            seen[cur_node] = True
+            for time, nei in graph[cur_node]:
+                dist[nei] = min(dist[nei], dist[cur_node]+time)
+                
+        ans = max(dist.values())
+        return ans if ans!=float('inf') else -1 
