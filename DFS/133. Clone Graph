@@ -1,0 +1,23 @@
+# Definition for a undirected graph node
+# class UndirectedGraphNode:
+#     def __init__(self, x):
+#         self.label = x
+#         self.neighbors = []
+
+# using a dictionary to avoid the loop in copying a graph
+class Solution:
+    # @param node, a undirected graph node
+    # @return a undirected graph node
+    def __init__(self):
+        self.doc = {}
+    def cloneGraph(self, node):
+        if node in self.doc:
+            return self.doc[node]
+        if not node:
+            return node
+        else:
+            ret = UndirectedGraphNode(node.label)
+            self.doc[node] = ret
+            for x in node.neighbors:
+                ret.neighbors.append(self.cloneGraph(x))            
+            return ret
