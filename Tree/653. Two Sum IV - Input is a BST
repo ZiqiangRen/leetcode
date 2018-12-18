@@ -1,0 +1,49 @@
+# contruct a list
+# naive method
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def findTarget(self, root, k):
+        """
+        :type root: TreeNode
+        :type k: int
+        :rtype: bool
+        """
+        def bst2list(root):
+            if not root:
+                return []
+            return bst2list(root.left)+[root.val]+bst2list(root.right)
+        nums = bst2list(root)
+        d = {}
+        for x in nums:
+            if k-x in d:
+                return True
+            else:
+                d[x] = 1
+        return False
+            
+# Hash
+class Solution(object):
+    def __init__(self):
+        self.d = {}
+    def findTarget(self, root, k):
+        """
+        :type root: TreeNode
+        :type k: int
+        :rtype: bool
+        """
+        if not root:
+            return False
+        if k-root.val in self.d:
+            return True
+        else:
+            self.d[root.val] = 1
+            return self.findTarget(root.left, k) or self.findTarget(root.right, k)
+            
+        
+        
