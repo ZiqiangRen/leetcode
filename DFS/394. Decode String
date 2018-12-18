@@ -1,0 +1,34 @@
+class Solution(object):
+    def decodeString(self, s):
+        """
+        :type s: str
+        :rtype: str
+        """
+        i = 0
+        stack = []
+        while i<len(s):
+            if s[i] == '[':
+                i += 1
+                continue
+            elif s[i] == ']':
+                out = []
+                p = stack.pop()            
+                while not p.isdigit():
+                    out.append(p)
+                    p = stack.pop()
+                p = int(p)
+                for _ in xrange(p):
+                    for x in out[::-1]:
+                        stack.append(x)
+            elif s[i].isdigit():
+                count = s[i]
+                while s[i+1].isdigit():
+                    i += 1
+                    count += s[i]
+                stack.append(count)           
+            else:
+                stack.append(s[i])
+            i += 1
+        return "".join(stack)
+        
+            
