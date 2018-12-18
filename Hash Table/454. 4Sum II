@@ -1,0 +1,73 @@
+# TLE solution
+
+class Solution(object):
+    def fourSumCount(self, A, B, C, D):
+        A.sort()
+        B.sort()
+        C.sort()
+        D.sort()
+        N = len(A)
+        i = 0
+        ans = 0
+        while i<N:
+            a = A[i]
+            if i>0 and a==A[i-1]:
+                ans += roundB
+                i += 1
+                continue
+            j = 0
+            roundB = 0
+            while j<N:
+                b = B[j]
+                if j>0 and b==B[j-1]:
+                    roundB += roundC
+                    j += 1
+                    continue
+                k = 0
+                roundC = 0
+                while k<N:
+                    c = C[k]
+                    if k>0 and c==C[k-1]:
+                        roundC += roundD
+                        k += 1
+                        continue
+                    tar = -a-b-c
+                    roundD = D.count(tar)
+                    roundC += roundD
+                    k += 1
+                roundB += roundC
+                j += 1
+            ans += roundB
+            i += 1
+        return ans
+        
+        
+        
+# O(n^2) solution
+class Solution(object):
+    def fourSumCount(self, A, B, C, D):
+        AB = {}
+        for a in A:
+            for b in B:
+                if a+b not in AB:
+                    AB[a+b] = 1
+                else:
+                    AB[a+b] += 1
+        CD = {}
+        for c in C:
+            for d in D:
+                if c+d not in CD:
+                    CD[c+d] = 1
+                else:
+                    CD[c+d] += 1   
+        res = 0
+        for ab in AB:
+            if -ab in CD:
+                res += AB[ab]*CD[-ab]
+        return res
+                            
+                    
+                
+            
+            
+        
