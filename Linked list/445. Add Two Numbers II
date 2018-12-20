@@ -1,0 +1,87 @@
+# convert to array:
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution(object):
+    def addTwoNumbers(self, l1, l2):
+        """
+        :type l1: ListNode
+        :type l2: ListNode
+        :rtype: ListNode
+        """
+        num1 = 0
+        while l1:
+            num1 = num1*10 + l1.val
+            l1 = l1.next
+        num2 = 0
+        while l2:
+            num2 = num2*10 + l2.val
+            l2 = l2.next
+        num = num1 + num2
+        ans = []
+        while num:
+            ans.append(num%10)
+            num = num/10
+        head = ListNode(0)
+        new = head
+        if not ans:
+            return head
+        while ans:
+            val = ans.pop()
+            new.next = ListNode(val)
+            new = new.next
+        return head.next
+        
+        
+# using stack:
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution(object):
+    def addTwoNumbers(self, l1, l2):
+        """
+        :type l1: ListNode
+        :type l2: ListNode
+        :rtype: ListNode
+        """
+        num1 = []
+        while l1:
+            num1.append(l1.val)
+            l1 = l1.next
+        num2 = []
+        while l2:
+            num2.append(l2.val)
+            l2 = l2.next
+        ans = []
+        carry = 0
+        while num1 and num2:
+            n1 = num1.pop()
+            n2 = num2.pop()
+            tmp = n1+n2+carry
+            ans.append(tmp%10)
+            carry = tmp/10
+        while num1:
+            n1 = num1.pop()
+            tmp = n1+carry
+            ans.append(tmp%10)
+            carry = tmp/10
+        while num2:
+            n2 = num2.pop()
+            tmp = n2+carry
+            ans.append(tmp%10)
+            carry = tmp/10            
+        if carry:
+            ans.append(1)
+        head = ListNode(0)
+        new = head
+        while ans:
+            val = ans.pop()
+            new.next = ListNode(val)
+            new = new.next
+        return head.next if head.next else head
