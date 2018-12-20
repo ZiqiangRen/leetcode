@@ -1,0 +1,35 @@
+# using dict cache
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution(object):
+    def numComponents(self, head, G):
+        """
+        :type head: ListNode
+        :type G: List[int]
+        :rtype: int
+        """
+        count = 0
+        d= {}
+        for g in G:
+            d[g] = 1
+        while head and head.next:
+            if head.val in d:
+                if head.next.val not in d:
+                    count += 1
+                    head = head.next
+                    continue
+                else:
+                    head = head.next
+                    while head and head.val in d:
+                        head = head.next
+                    count += 1
+            else:
+                head = head.next
+        return count+1 if head and head.val in d else count
+                    
+                
+        
