@@ -1,0 +1,28 @@
+class Solution(object):
+    def isSubsequence(self, s, t):
+        """
+        :type s: str
+        :type t: str
+        :rtype: bool
+        """
+        index = 0
+        i = 0
+        while i<len(s):
+            if s[i] not in t[index:]:
+                return False
+            index += t[index:].index(s[i])+1
+            i += 1
+        return True
+        
+        
+# super short Python solution using iterator!  iter()
+def isSubsequence(self, s, t):
+    t = iter(t)
+    return all(c in t for c in s)
+    
+# How the iter() works?
+# It works like this:
+x = iter(["apple", "banana", "cherry"])
+print(next(x))
+print(next(x))
+print(next(x))
