@@ -1,0 +1,50 @@
+# naive greedy solution
+# Definition for an interval.
+# class Interval(object):
+#     def __init__(self, s=0, e=0):
+#         self.start = s
+#         self.end = e
+
+class Solution(object):
+    def eraseOverlapIntervals(self, intervals):
+        """
+        :type intervals: List[Interval]
+        :rtype: int
+        """
+        if not intervals:
+            return 0
+        intervals.sort(key=lambda x:(x.start, x.end))
+        last = intervals[0]
+        count = 0
+        i = 1
+        while i<len(intervals): 
+            if intervals[i].start<last.end and intervals[i].end>=last.end:
+                count += 1
+            elif intervals[i].end<last.end:
+                count += 1
+                last = intervals[i]
+            else:
+                last = intervals[i]
+            i += 1
+        return count
+        
+            
+        
+        
+# shorter solution
+
+class Solution(object):
+    def eraseOverlapIntervals(self, intervals):
+        """
+        :type intervals: List[Interval]
+        :rtype: int
+        """
+        end = float('-inf')
+        count = 0
+        intervals.sort(key=lambda x:(x.end,x.start))
+        for x in intervals:
+            if x.start>=end:
+                end = x.end
+            else:
+                count += 1
+        return count
