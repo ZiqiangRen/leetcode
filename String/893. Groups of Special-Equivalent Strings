@@ -1,0 +1,23 @@
+class Solution(object):
+    def numSpecialEquivGroups(self, A):
+        """
+        :type A: List[str]
+        :rtype: int
+        """
+        for i in range(len(A)):
+            even = ""
+            odd = ""
+            for j in range(len(A[i])):
+                if j%2:
+                    odd+=A[i][j]
+                else:
+                    even+=A[i][j]
+            A[i] = ("".join(sorted(even)), "".join(sorted(odd)))
+        return len(list(set(A)))
+        
+        
+        
+ ################       
+ class Solution(object):
+    def numSpecialEquivGroups(self, A):
+        return len(set("".join(sorted(s[0::2])) + "".join(sorted(s[1::2])) for s in A))
