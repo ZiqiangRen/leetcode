@@ -1,0 +1,38 @@
+# my naive solution:
+class Solution(object):
+    def reconstructQueue(self, people):
+        """
+        :type people: List[List[int]]
+        :rtype: List[List[int]]
+        """
+        indices = [i for i in range(len(people))]
+        people.sort(key=lambda x:(x[0], x[1]))
+        print people
+        ans = [0]*len(people)
+        i = 0
+        while i<len(people):
+            buf = [people[i]]
+            while i+1<len(people) and people[i][0]==people[i+1][0]:
+                i += 1
+                buf.append(people[i])
+            for single in buf:
+                index = indices[single[1]]
+                ans[index] = single
+            for single in buf[::-1]:
+                indices.remove(indices[single[1]])
+            i += 1
+        return ans
+        
+# short solution:
+
+class Solution(object):
+    def reconstructQueue(self, people):
+        """
+        :type people: List[List[int]]
+        :rtype: List[List[int]]
+        """
+        people.sort(key=lambda x:(-x[0], x[1]))
+        q = []
+        for p in people:
+            q.insert(p[1], p)
+        return q
