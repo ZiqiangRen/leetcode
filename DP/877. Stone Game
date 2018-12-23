@@ -1,0 +1,24 @@
+#TLE
+class Solution(object):
+    def stoneGame(self, piles, alex=0, lee=0, isAlex=True):
+        """
+        :type piles: List[int]
+        :rtype: bool
+        """
+        if not piles:
+            return alex>lee if isAlex else alex<lee
+        if isAlex:
+            return not self.stoneGame(piles[1:], alex+piles[0], lee, False) or not self.stoneGame(piles[:-1], alex+piles[-1], lee, False)
+        else:
+            return not self.stoneGame(piles[1:], alex, lee+piles[0], True) or not self.stoneGame(piles[:-1], alex, lee+piles[-1], True)
+            
+# shorter but still TLE
+class Solution(object):
+    def stoneGame(self, piles, alex=0, isAlex=True):
+        """
+        :type piles: List[int]
+        :rtype: bool
+        """
+        if not piles:
+            return alex>0 if isAlex else alex<0
+        return not self.stoneGame(piles[1:], alex+piles[0] if isAlex else alex-piles[0], not isAlex) or not self.stoneGame(piles[:-1], alex+piles[-1] if piles[-1] else alex-piles[-1], not isAlex)
