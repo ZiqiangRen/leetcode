@@ -1,0 +1,59 @@
+######### Iterate Triangles
+#For each triangle, let's try to find the 4th point and whether it is a rectangle.
+# Let's assume that p2 and p3 are oppsite points, so are p1 and p4
+# using complex numbers to calculate length and area
+# time complexity O(n^3)
+# space complexity O(n), used HashSet
+
+class Solution(object):
+    def minAreaFreeRect(self, points):
+        """
+        :type points: List[List[int]]
+        :rtype: float
+        """
+        points = set(map(tuple, points))
+        ans = float('inf')
+        for p1, p2, p3 in itertools.combinations(points, 3):
+            p4 = p2[0]+p3[0]-p1[0], p2[1]+p3[1]-p1[1]
+            if p4 in points:
+                v12 = complex(p1[0]-p2[0], p1[1]-p2[1])
+                v13 = complex(p1[0]-p3[0], p1[1]-p3[1])
+                if abs(v12.real*v13.real + v12.imag*v13.imag)==0:
+                    area = abs(v12)*abs(v13)
+                    if area<ans:
+                        ans = area
+        return ans if ans < float('inf') else 0
+        
+########
+# center and radius: if two point pairs (p1,p2), (p3,p4) have the same center and the same radius, they can form a rectangle.
+# Used complex() and iteritems() and collections.defaultdict(list)
+class Solution(object):
+    def minAreaFreeRect(self, points):
+        """
+        :type points: List[List[int]]
+        :rtype: float
+        """
+        #points = set(map(tuple, points))
+        #print [complex(z) for z in points]
+        points = [complex(*z) for z in points]
+        #print points
+        d = collections.defaultdict(list)
+        ans = float('inf')
+        for p1, p2 in itertools.combinations(points, 2):
+            center = (p1+p2)/2
+            radius = abs(center - p1)
+            d[center, radius].append(p1)
+        for [center, radius], ps in d.iteritems():
+            for p1, p2 in itertools.combinations(ps, 2):
+                v1 = p1 - p2
+                v2 = p2 - (2*center - p1)
+                if abs(v1)*abs(v2)<ans:
+                    ans = abs(v1)*abs(v2)
+        return ans if ans<float('inf') else 0
+                
+                
+            
+            
+                
+                
+            
