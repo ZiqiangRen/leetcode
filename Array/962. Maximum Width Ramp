@@ -1,0 +1,33 @@
+##############
+class Solution(object):
+    def maxWidthRamp(self, A):
+        """
+        :type A: List[int]
+        :rtype: int
+        """
+        mx = 0
+        ind = float('inf')
+        index = collections.defaultdict(list)
+        for i, num in enumerate(A):
+            index[num].append(i)
+        for num in sorted(A):
+            mx = max(mx, index[num][-1] - ind)
+            ind = min(ind, index[num][0])
+        return mx
+        
+################
+class Solution(object):
+    def maxWidthRamp(self, A):
+        """
+        :type A: List[int]
+        :rtype: int
+        """
+        s = []
+        ans = 0
+        for i in range(len(A)):
+            if not s or A[i]<=A[s[-1]]:
+                s.append(i)
+        for i in range(len(A))[::-1]:
+            while s and A[i]>=A[s[-1]]:
+                ans = max(ans, i-s.pop())
+        return ans
