@@ -1,0 +1,45 @@
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class CBTInserter(object):
+
+    def __init__(self, root):
+        """
+        :type root: TreeNode
+        """
+        self.r = root
+
+    def insert(self, v):
+        """
+        :type v: int
+        :rtype: int
+        """
+        q = [self.r]
+        while q:
+            cur = q.pop()
+            if not cur.left:
+                cur.left = TreeNode(v)
+                return cur.val
+            if not cur.right:
+                cur.right = TreeNode(v)
+                return cur.val
+            q.insert(0, cur.left)
+            q.insert(0, cur.right)
+            
+            
+
+    def get_root(self):
+        """
+        :rtype: TreeNode
+        """
+        return self.r
+
+
+# Your CBTInserter object will be instantiated and called as such:
+# obj = CBTInserter(root)
+# param_1 = obj.insert(v)
+# param_2 = obj.get_root()
