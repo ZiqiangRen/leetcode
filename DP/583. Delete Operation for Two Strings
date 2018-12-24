@@ -1,0 +1,62 @@
+## naive recursive TLE:
+class Solution(object):
+    def minDistance(self, word1, word2):
+        """
+        :type word1: str
+        :type word2: str
+        :rtype: int
+        """
+        def lcs(str1, str2, m, n):
+            if not m or not n:
+                return 0
+            if str1[m-1]==str2[n-1]:
+                return 1+lcs(str1, str2, m-1, n-1)
+            else:
+                return max(lcs(str1, str2, m-1, n), lcs(str1, str2, m, n-1))
+        return len(word1)+len(word2)-2*lcs(word1, word2, len(word1), len(word2))
+        
+# naive recursive with Memoization
+# Time Complexity: O(m*n), memo array of size mmxnn needs to be filled once. 
+# Space Complexity: O(m*n)
+class Solution(object):
+    def minDistance(self, word1, word2):
+        d = {}
+        def lcs(str1, str2, m, n):
+            if (m, n) not in d:
+                if not m or not n:
+                    d[(m, n)] = 0
+                elif str1[m-1]==str2[n-1]:
+                    d[(m, n)] = 1+lcs(str1, str2, m-1, n-1)
+                else:
+                    d[(m, n)] = max(lcs(str1, str2, m-1, n), lcs(str1, str2, m, n-1))              
+            return d[(m, n)]
+        
+        return len(word1)+len(word2)-2*lcs(word1, word2, len(word1), len(word2))
+        
+# DP using iteration and LCS
+class Solution(object):
+    def minDistance(self, word1, word2):
+        d = {}
+        for m in range(len(word1)+1):
+            for n in range(len(word2)+1):
+                if not m or not n:
+                    d[(m, n)] = 0
+                elif word1[m-1]==word2[n-1]:
+                    d[(m, n)] = 1+d[(m-1, n-1)]
+                else:
+                    d[(m, n)] = max(d[(m-1, n)], d[(m, n-1)])
+        return len(word1) + len(word2) - 2*d[(len(word1), len(word2))]
+
+# DP without LCS, d[][] array's each element is the value of "minimum delete numbers"
+class Solution(object):
+    def minDistance(self, word1, word2):
+        d = {}
+        for m in range(len(word1)+1):
+            for n in range(len(word2)+1):
+                if not m or not n:
+                    d[(m, n)] = m + n 
+                elif word1[m-1]==word2[n-1]:
+                    d[(m, n)] = d[(m-1, n-1)]
+                else:
+                    d[(m, n)] = 1+min(d[(m-1, n)], d[(m, n-1)])
+        return d[(len(word1), len(word2))]
