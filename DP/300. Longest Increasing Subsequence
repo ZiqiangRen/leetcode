@@ -1,0 +1,57 @@
+#### TLE:
+class Solution(object):
+    def lengthOfLIS(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        
+        def helper(nums, prev):
+            if len(nums)==1:
+                return 1 if nums[0]>prev else 0
+            taken = 0
+            if nums[0]>prev:
+                taken = 1+helper(nums[1:], nums[0])
+            nottaken = helper(nums[1:], prev)
+            return max(taken, nottaken)
+            
+        return helper(nums, float('-inf')) if nums else 0
+        
+### TLE:
+class Solution(object):
+    def lengthOfLIS(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        prelen = []
+        for i,num in enumerate(nums):
+            for data in prelen:
+                if num>data[0]:
+                    prelen.append([num, data[1]+1])
+            prelen.append([num, 1])
+        return max([data[1] for data in prelen]) if prelen else 0
+        
+#  DP using array:
+class Solution(object):
+    def lengthOfLIS(self, nums):
+        prelen = []
+        for i,num in enumerate(nums):
+            maxval = 0
+            for data in prelen:
+                if num>data[0]:
+                    maxval = max(maxval, data[1])
+            prelen.append([num, 1+maxval])
+        return max([data[1] for data in prelen]) if prelen else 0
+        
+ # Simplified DP:
+ class Solution(object):
+    def lengthOfLIS(self, nums):
+        dp = []
+        for i in range(len(nums)):
+            maxval = 0
+            for j in range(i):
+                if nums[i]>nums[j]:
+                    maxval = max(maxval, dp[j])
+            dp.append(1+maxval)
+        return max(dp) if dp else 0
