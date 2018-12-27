@@ -1,0 +1,47 @@
+### naive recursion:
+class Solution(object):
+    def minimumDeleteSum(self, s1, s2):
+        """
+        :type s1: str
+        :type s2: str
+        :rtype: int
+        """
+        def lcs(s1, s2, m, n):
+            if not m:
+                return sum([ord(c) for c in s2[:n]])
+            if not n:
+                return sum([ord(c) for c in s1[:m]])
+            if s1[m-1]==s2[n-1]:
+                return lcs(s1, s2, m-1, n-1)
+            return min(ord(s1[m-1])+lcs(s1,s2,m-1,n), ord(s2[n-1])+lcs(s1,s2,m,n-1))
+        return lcs(s1,s2,len(s1),len(s2))
+                
+            
+        
+ #############
+ class Solution(object):
+    def minimumDeleteSum(self, s1, s2):
+        """
+        :type s1: str
+        :type s2: str
+        :rtype: int
+        """
+        dp = [[0]*(len(s2)) for _ in range(len(s1))]
+        for i in range(len(s1)):
+            for j in range(len(s2)):
+                if not i:
+                    dp[i][j] = sum([ord(c) for c in s2[:j]]) if j else 0
+                elif not j:
+                    dp[i][j] = sum([ord(c) for c in s1[:i]]) if i else 0
+                else:
+                    if s1[i]!=s2[j]:
+                        dp[i][j] = min(ord(s1[i])+dp[i-1][j], ord(s2[j])+dp[i][j-1])
+                    else:
+                        dp[i][j] = dp[i-1][j-1]
+        return dp[-1][-1] if dp else 0
+    
+    
+                
+            
+        
+        
