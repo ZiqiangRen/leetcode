@@ -1,0 +1,43 @@
+# First traveral the tree's all nodes, and when reach the leaf node, append the current sub-path (including '#' denoting the null node type)
+# 
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def findDuplicateSubtrees(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[TreeNode]
+        """
+        d = {}
+        ans = set()
+        def collect(node):
+            if not node.left and not node.right:
+                if (node.val) not in d:
+                    d[(node.val)] = node
+                else:
+                    ans.add(d[(node.val)])
+                return [node.val]
+            else:
+                left = collect(node.left) if node.left else ['#']
+                right = collect(node.right) if node.right else ['#']
+                if tuple([node.val] + left + right) not in d:
+                    d[tuple([node.val] + left + right)] = node
+                else:
+                    ans.add(d[tuple([node.val] + left + right)])
+                return [node.val] + left + right
+        if root:
+            collect(root)
+        return list(ans)       
+                
+                    
+                    
+            
+                
+                    
+                
+        
