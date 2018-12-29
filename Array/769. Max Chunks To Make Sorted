@@ -1,0 +1,24 @@
+########## naive method
+class Solution(object):
+    def maxChunksToSorted(self, arr):
+        """
+        :type arr: List[int]
+        :rtype: int
+        """
+        left = 0
+        count = 0
+        while left<len(arr):
+            i = left
+            right = max(arr.index(left), arr[left])
+            right = max(arr[right], right)
+            while i<right and arr[i]<=right:
+                i += 1
+            if i==right:
+                count += 1
+                left = right+1
+            else:
+                left = i
+        return count
+                
+                
+############
