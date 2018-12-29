@@ -1,0 +1,39 @@
+### naive recursion, TLE
+    def findLongestChain(self, pairs):
+        """
+        :type pairs: List[List[int]]
+        :rtype: int
+        """
+        pairs.sort(key=lambda x:x[0])
+        N = len(pairs)
+        def dp(i, last, length=0):
+            if i==N:
+                return length
+            if pairs[i][0]>last:
+                return max(dp(i+1, last, length), dp(i+1, pairs[i][1], length+1))
+            else:
+                return max(dp(i+1, last, length), dp(i+1, pairs[i][1], 1))
+        return dp(0, float('-inf'))
+########################
+class Solution(object):
+    def findLongestChain(self, pairs):
+        pairs.sort()
+        dp = [1]*len(pairs)
+        for j in xrange(len(pairs)):
+            for i in xrange(j):
+                if pairs[i][1]<pairs[j][0]:
+                    dp[j] = max(dp[j], dp[i]+1)
+        return max(dp)
+        
+############### Greedy
+class Solution(object):
+    def findLongestChain(self, pairs):
+        pairs.sort(key=lambda x:x[1])
+        last = float('-inf')
+        count = 0
+        for i in xrange(len(pairs)):
+            if last<pairs[i][0]:
+                last = pairs[i][1]
+                count +=1
+        return count
+        
