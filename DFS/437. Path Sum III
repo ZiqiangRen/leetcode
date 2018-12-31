@@ -1,0 +1,45 @@
+############   TLE version   redundant traverse
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def pathSum(self, root, sum):
+        """
+        :type root: TreeNode
+        :type sum: int
+        :rtype: int
+        """
+        self.count = 0
+        self.d = {}
+        def helper(root, target, node, path=0):
+            if not root:
+                return
+            if path+root.val == target and (node, root) not in self.d:
+                self.d[(node, root)] = 1
+                self.count += 1
+            helper(root.left, target, node, path+root.val)
+            helper(root.right, target, node, path+root.val)
+            helper(root.left, target, root.left)
+            helper(root.right, target, root.right)
+            return
+        helper(root, sum, root)
+        return self.count
+        
+        
+#########
+class Solution(object):
+    def pathSum(self, root, sum):
+        if not root:
+            return 0 
+        return self.pathSumFrom(root, sum)+self.pathSum(root.left, sum)+self.pathSum(root.right, sum)
+        
+        
+    def pathSumFrom(self, root, sum):
+        if not root:
+            return 0
+        cur = 1 if root.val==sum else 0
+        return cur +self.pathSumFrom(root.left, sum-root.val)+self.pathSumFrom(root.right, sum-root.val)
