@@ -1,0 +1,69 @@
+########### this one doesn't work
+class Solution:
+    def ladderLength(self, beginWord, endWord, wordList):
+        """
+        :type beginWord: str
+        :type endWord: str
+        :type wordList: List[str]
+        :rtype: int
+        """
+        if endWord not in wordList:
+            return 0        
+        N = len(wordList)
+        
+        def check(str1, str2):
+            count = 0
+            for x,y in zip(str1, str2):
+                if x!=y:
+                    count += 1
+            return True if count==1 else False
+        
+        def bfs(i, length, seen):
+            if i in seen:
+                return float('inf')
+            seen.add(i)
+            if wordList[i]==endWord:
+                return length
+            return min(bfs(j, length+1,seen) for j in range(N) if check(wordList[j],wordList[i]))
+        
+        ans = float('inf')
+        for i,word in enumerate(wordList):
+            if check(beginWord, word):
+                print(word)
+                ans = min(ans, bfs(i,1,set()))
+        return ans if ans<float('inf') else 0
+        
+################ TLE
+class Solution:
+    def ladderLength(self, beginWord, endWord, wordList):
+        def check(str1, str2):
+            count = 0
+            for x,y in zip(str1, str2):
+                if x!=y:
+                    count += 1
+            return True if count==1 else False
+        
+        if endWord in wordList:
+            wordList[wordList.index(endWord)] = beginWord
+        else:
+            return 0
+        seen = set()
+        left = wordList
+        level = [endWord]
+        ans = []
+        while True:
+            new = []
+            for finished in level:
+                for waiting in left:
+                    if waiting not in seen and check(waiting, finished):
+                        new.append(waiting)
+                        seen.add(waiting)
+            level = new
+            if level:
+                ans.append(level)
+                if beginWord in level:
+                    return len(ans)+1
+            else:
+                return 0
+                    
+        
