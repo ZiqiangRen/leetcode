@@ -1,0 +1,32 @@
+####### itertools.permutation:
+class Solution(object):
+    def calcEquation(self, equations, values, queries):
+        """
+        :type equations: List[List[str]]
+        :type values: List[float]
+        :type queries: List[List[str]]
+        :rtype: List[float]
+        """
+        cache = collections.defaultdict(dict)
+        for (a,b), val in zip(equations, values):
+            cache[a][a] = cache[b][b] = 1.0
+            cache[a][b] = val
+            cache[b][a] = 1.0/val
+        for i,j,k in itertools.permutations(cache, 3):
+            if i in cache[j] and j in cache[k]:
+                cache[k][i] = cache[j][i] * cache[k][j]
+        return [cache[a].get(b, -1.0) for a, b in queries]
+        
+        
+############
+def calcEquation(self, equations, values, queries):
+    quot = collections.defaultdict(dict)
+    for (num, den), val in zip(equations, values):
+        quot[num][num] = quot[den][den] = 1.0
+        quot[num][den] = val
+        quot[den][num] = 1 / val
+    for k in quot:
+        for i in quot[k]:
+            for j in quot[k]:
+                quot[i][j] = quot[i][k] * quot[k][j]
+    return [quot[num].get(den, -1.0) for num, den in queries]
