@@ -1,0 +1,66 @@
+#########  use collections.deque    popleft()   TLE version
+class Solution(object):
+    def updateMatrix(self, matrix):
+        row = len(matrix)
+        col = len(matrix[0])
+        ans = [[0]*col for _ in xrange(row)]
+          
+        def bfs(m,n):         
+            res = []
+            q = collections.deque()
+            seen = set()
+            seen.add((m,n))
+            q.append((m,n,0))
+            while q:
+                i,j,l = q.popleft()
+                if i<0 or i>=row or j<0 or j>=col:
+                    continue
+                if matrix[i][j]==0:
+                    res.append(l)
+                    continue
+                if (i+1,j) not in seen:
+                    q.append((i+1,j,l+1))
+                    seen.add((i+1,j))
+                if (i-1,j) not in seen:
+                    q.append((i-1,j,l+1))  
+                    seen.add((i-1,j))
+                if (i,j+1) not in seen:
+                    q.append((i,j+1,l+1)) 
+                    seen.add((i,j+1))
+                if (i,j-1) not in seen:
+                    q.append((i,j-1,l+1))
+                    seen.add((i,j-1))
+            return min(res)
+                    
+        for i in xrange(row):
+            for j in xrange(col):
+                if matrix[i][j]:
+                    ans[i][j] = bfs(i,j)
+        return ans
+        
+        
+        
+ ##########  grow from 0, using yield generator!!!   BFS solution:
+ class Solution(object):
+    def updateMatrix(self, matrix):
+        row, col = len(matrix), len(matrix[0])
+        ans = [[0]*col for _ in matrix]
+        def neighbors(r, c):
+            for cr, cc in ((r-1,c),(r+1,c),(r,c-1),(r,c+1)):
+                if 0 <= cr < row and 0 <= cc < col:
+                    yield cr, cc
+        q = collections.deque([((r, c), 0) 
+            for r in xrange(row) 
+            for c in xrange(col) 
+            if matrix[r][c] == 0])
+        seen = {x for x,_ in q}
+        while q:
+            (r,c), depth = q.popleft()
+            ans[r][c] = depth
+            for nei in neighbors(r, c):
+                if nei not in seen:
+                    seen.add(nei)
+                    q.append((nei, depth+1))
+        return ans
+            
+                
