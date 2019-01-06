@@ -1,0 +1,36 @@
+# recursion+memo:   TLE
+class Solution(object):
+    def splitArray(self, nums, m):
+        """
+        :type nums: List[int]
+        :type m: int
+        :rtype: int
+        """
+        length = len(nums)
+        cache = {}
+        def helper(index, n):
+            if (index,n) not in cache:
+                if n==1:
+                    cache[(index,n)] = sum(nums[index:])
+                else:
+                    mi = float('inf')
+                    for i in xrange(index+1, length+1):
+                        mi = min(mi, max(sum(nums[index:i]), helper(i, n-1)))
+                    cache[(index,n)] = mi
+            return cache[(index,n)]
+        return helper(0,m)
+        
+        
+ ############ DP solution
+ class Solution(object):
+    def splitArray(self, nums, m):
+        length = len(nums)
+        dp = [[float('inf')]*m for _ in xrange(length)]
+        for n in range(m):
+            for index in range(length):
+                if n==0:
+                    dp[index][n] = sum(nums[index:])
+                else:
+                    tmp = [max(  sum(nums[index:i]), dp[i][n-1]) for i in xrange(index+1, length)]
+                    dp[index][n] = min(tmp) if tmp else float('inf')
+        return dp[0][-1]
