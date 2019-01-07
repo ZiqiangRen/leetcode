@@ -1,0 +1,52 @@
+### recursion+memo  TLE
+class Solution(object):
+    def canIWin(self, maxChoosableInteger, desiredTotal):
+        """
+        :type maxChoosableInteger: int
+        :type desiredTotal: int
+        :rtype: bool
+        """
+        cache = {}
+        nums = list(range(1,maxChoosableInteger+1))
+        self.length = maxChoosableInteger
+        
+        def helper(mask, target):
+            if max([nums[i] for i in xrange(self.length) if not mask&(1<<i)])>=target:
+                return True
+            if (mask, target) not in cache:
+                cache[(mask, target)] =  not all([helper(mask|(1<<i), target-nums[i]) for i in xrange(self.length) if not mask&(1<<i)])
+            return cache[(mask, target)]
+        
+        return helper(0, desiredTotal)
+        
+        
+        
+ ##################   not all is not that good
+ class Solution(object):
+    def canIWin(self, maxChoosableInteger, desiredTotal):
+        """
+        :type maxChoosableInteger: int
+        :type desiredTotal: int
+        :rtype: bool
+        """
+        if (1 + maxChoosableInteger) * maxChoosableInteger/2 < desiredTotal:
+            return False
+        self.memo = {}
+        return self.helper(range(1, maxChoosableInteger + 1), desiredTotal)
+
+        
+    def helper(self, nums, desiredTotal):
+        
+        hash = str(nums)
+        if hash in self.memo:
+            return self.memo[hash]
+        
+        if nums[-1] >= desiredTotal:
+            return True
+            
+        for i in range(len(nums)):
+            if not self.helper(nums[:i] + nums[i+1:], desiredTotal - nums[i]):
+                self.memo[hash]= True
+                return True
+        self.memo[hash] = False
+        return False
