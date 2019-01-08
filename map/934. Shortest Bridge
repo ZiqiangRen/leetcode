@@ -1,0 +1,136 @@
+######  It works but TLE if the input matrix is very large. Because we visit some redandunt points
+class Solution(object):
+    def shortestBridge(self, A):
+        """
+        :type A: List[List[int]]
+        :rtype: int
+        """
+        
+        row = len(A)
+        col = len(A[0])
+        def modify():
+            for i in range(row):
+                for j in range(col):
+                    if A[i][j]:
+                        dfs(i, j)
+                        return
+        def dfs(i, j):
+            if i<0 or i>=row or j<0 or j>=col:
+                return
+            if A[i][j]==-1:
+                return
+            if A[i][j]==0:
+                return
+            else:
+                A[i][j] = -1
+                dfs(i-1, j)
+                dfs(i+1, j)
+                dfs(i, j+1)
+                dfs(i, j-1)
+                return
+                
+        def bfs(x, y, path=1):
+            q = collections.deque()
+            q.append((x,y,path))
+            seen = set()
+            while q:
+                i,j, path = q.popleft()
+                if i<0 or i>=row or j<0 or j>=col:
+                    continue
+                if A[i][j]==-1 or (i,j) in seen:
+                    continue
+                if A[i][j]==0:
+                    seen.add((i,j))
+                    q.append((i-1, j, path+1))
+                    q.append((i+1, j, path+1))
+                    q.append((i, j-1, path+1))
+                    q.append((i, j+1, path+1))
+                elif A[i][j]==1:
+                    return path
+            return float('inf')          
+        modify()
+        ans = []
+        #print A
+        for i in range(row):
+            for j in range(col):
+                if A[i][j] == -1:     
+                    for u,v in ((i-1,j),(i+1,j),(i,j+1),(i,j-1)):
+                        if 0<=u<row and 0<=v<col and A[u][v]==0:
+                            ans.append(bfs(u,v))
+        #print ans
+        return min(ans)-1
+
+#########################   finally passed
+class Solution(object):
+    def shortestBridge(self, A):
+        """
+        :type A: List[List[int]]
+        :rtype: int
+        """
+        
+        row = len(A)
+        col = len(A[0])
+        def modify():
+            for i in range(row):
+                for j in range(col):
+                    if A[i][j]:
+                        dfs(i, j)
+                        return
+        def dfs(i, j):
+            if i<0 or i>=row or j<0 or j>=col:
+                return
+            if A[i][j]==-1:
+                return
+            if A[i][j]==0:
+                return
+            else:
+                A[i][j] = -1
+                dfs(i-1, j)
+                dfs(i+1, j)
+                dfs(i, j+1)
+                dfs(i, j-1)
+                return
+            
+        def check(i,j):
+            if 0<=i<row and 0<=j<col:
+                return True
+            return False
+            
+            
+        def bfs(x, y, path=1):
+            q = collections.deque()
+            q.append((x,y,path))
+            seen = set()
+            while q:
+                i,j, path = q.popleft()
+                if i<0 or i>=row or j<0 or j>=col:
+                    continue
+                if A[i][j]==-1 or (i,j) in seen:
+                    continue
+                if A[i][j]==0:
+                    seen.add((i,j))
+                    q.append((i-1, j, path+1))
+                    q.append((i+1, j, path+1))
+                    q.append((i, j-1, path+1))
+                    q.append((i, j+1, path+1))
+                elif A[i][j]==1:
+                    return path
+            return float('inf')          
+        modify()
+        ans = []
+        #print A
+        for i in range(row):
+            for j in range(col):
+                if A[i][j] == 0 and -1 in [A[i-1][j] if check(i-1,j) else 0, A[i+1][j] if check(i+1,j) else 0, A[i][j-1] if check(i,j-1) else 0, A[i][j+1] if check(i,j+1) else 0]:
+                    ans.append(bfs(i,j)) 
+                    
+                    
+                    
+        #print ans
+        return min(ans)-1
+
+        
+        
+            
+        
+            
